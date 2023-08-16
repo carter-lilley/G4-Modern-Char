@@ -1,0 +1,168 @@
+[gd_scene load_steps=17 format=3 uid="uid://co3gkwf5cx7ll"]
+
+[ext_resource type="Texture2D" uid="uid://iswd4pnd6i5b" path="res://textures/dev_textures/Dark/texture_08.png" id="1_jdn7f"]
+[ext_resource type="Texture2D" uid="uid://dvc4lkms8qkyv" path="res://textures/dev_textures/Dark/texture_03.png" id="2_v7458"]
+[ext_resource type="Script" path="res://scripts/camera_main.gd" id="3_wxseb"]
+[ext_resource type="Script" path="res://scenes/cb-player.gd" id="4_5jc6p"]
+[ext_resource type="Curve" uid="uid://dw4tocrprnrsc" path="res://prefabs/velDotCurve.tres" id="5_m32ix"]
+[ext_resource type="PackedScene" uid="uid://c8lqnnedam1xb" path="res://models/guy_import.tscn" id="5_ny7bv"]
+[ext_resource type="Script" path="res://models/model_transform.gd" id="6_rwdjj"]
+[ext_resource type="Script" path="res://scenes/TWEEN-TESTER.gd" id="8_eul35"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4m2wd"]
+albedo_texture = ExtResource("1_jdn7f")
+uv1_scale = Vector3(5000, 5000, 5000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qk0go"]
+albedo_texture = ExtResource("2_v7458")
+
+[sub_resource type="Curve" id="Curve_23uei"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 3.12087, 0.323593, 0, 0]
+point_count = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ojt0y"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_7wrur"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iwo8d"]
+radius = 0.35
+height = 1.829
+
+[sub_resource type="SphereMesh" id="SphereMesh_mwp78"]
+radius = 0.25
+height = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_470y2"]
+albedo_color = Color(1, 0, 0.0156863, 1)
+
+[node name="World" type="Node3D"]
+
+[node name="CSG-DebugEnvironment" type="CSGCombiner3D" parent="." groups=["enviro"]]
+use_collision = true
+
+[node name="Measuring" type="CSGBox3D" parent="CSG-DebugEnvironment" groups=["enviro"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.604, 1.31318, 101.566)
+size = Vector3(1, 2, 214.5)
+material = SubResource("StandardMaterial3D_4m2wd")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSG-DebugEnvironment" groups=["enviro"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+size = Vector3(20000, 1, 20000)
+material = SubResource("StandardMaterial3D_4m2wd")
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="CSG-DebugEnvironment" groups=["enviro"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.12963, 0.963988, -6.63312)
+polygon = PackedVector2Array(-3, -1, -3, 1, 1, 1, 5, -1)
+depth = 8.0
+material = SubResource("StandardMaterial3D_qk0go")
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="CSG-DebugEnvironment" groups=["enviro"]]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 5, -0.0327836, 0)
+height = 10.0
+sides = 32
+
+[node name="Camera3D" type="Camera3D" parent="."]
+fov = 70.0
+script = ExtResource("3_wxseb")
+Hsense = null
+Vsense = null
+follow_smooth = 5
+stick_response = SubResource("Curve_23uei")
+tar_offset = Vector3(0, 0, -2.305)
+cam_rot = null
+pitch_limit = Vector2(-45, 80)
+pole_origin = null
+look_offset = Vector3(0, 0.3, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.292288, 0.95633, 0, -0.95633, 0.292288, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Props" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.43977, 10.7628)
+
+[node name="Box" type="RigidBody3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+mass = 200.0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Box"]
+shape = SubResource("BoxShape3D_ojt0y")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Props/Box"]
+mesh = SubResource("BoxMesh_7wrur")
+
+[node name="Box2" type="RigidBody3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Box2"]
+shape = SubResource("BoxShape3D_ojt0y")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Props/Box2"]
+mesh = SubResource("BoxMesh_7wrur")
+
+[node name="Box3" type="RigidBody3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 1)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Box3"]
+shape = SubResource("BoxShape3D_ojt0y")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Props/Box3"]
+mesh = SubResource("BoxMesh_7wrur")
+
+[node name="Box4" type="RigidBody3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 5)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Box4"]
+shape = SubResource("BoxShape3D_ojt0y")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Props/Box4"]
+mesh = SubResource("BoxMesh_7wrur")
+
+[node name="Box5" type="RigidBody3D" parent="Props"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8426, 4)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Props/Box5"]
+shape = SubResource("BoxShape3D_ojt0y")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Props/Box5"]
+mesh = SubResource("BoxMesh_7wrur")
+
+[node name="Character" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.14557, 0)
+script = ExtResource("4_5jc6p")
+collision_impulse = 15.0
+ACCEL = 0.7
+dot_factor = ExtResource("5_m32ix")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Character"]
+shape = SubResource("CapsuleShape3D_iwo8d")
+
+[node name="guy_import" parent="Character" instance=ExtResource("5_ny7bv")]
+script = ExtResource("6_rwdjj")
+collisionShapePath = NodePath("../CollisionShape3D")
+
+[node name="TWEEN-TESTER" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.243676, 4.86293)
+mesh = SubResource("SphereMesh_mwp78")
+surface_material_override/0 = SubResource("StandardMaterial3D_470y2")
+script = ExtResource("8_eul35")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="CenterContainer"]
+custom_minimum_size = Vector2(2, 1000)
+layout_mode = 2
+
+[node name="ColorRect2" type="ColorRect" parent="CenterContainer"]
+custom_minimum_size = Vector2(1500, 2)
+layout_mode = 2
